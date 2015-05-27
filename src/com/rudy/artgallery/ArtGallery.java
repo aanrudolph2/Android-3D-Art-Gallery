@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Scanner;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -43,17 +44,17 @@ public class ArtGallery extends Activity
 			try
 			{
 				InputStream iStream = mgr.open("fShader");
-				File shaderDir = getDir("artgallery.shaders", MODE_PRIVATE);
-				FileOutputStream oStream = new FileOutputStream(shaderDir.getAbsolutePath() + "/fshader");
+				String shaderDir = getDir("com.rudy.artgallery", MODE_PRIVATE).getPath() + File.separator;
+				Scanner s = new Scanner(iStream);
+				FileOutputStream oStream = new FileOutputStream(shaderDir + "fshader");
 				
-				byte[] buf = new byte[32];
-				
-				while(iStream.read(buf, 0, 32) > -1)
+				while(s.hasNextLine())
 				{
-					oStream.write(buf);
+					oStream.write(s.nextLine().getBytes());
 				}
 				
-				iStream.close();
+				s.close();
+				
 				oStream.close();
 			}
 			catch (IOException e)
