@@ -4,7 +4,7 @@ GLuint compile_shader(const GLenum type, const GLchar* source, const GLint lengt
 {
 	GLuint shader_obj = glCreateShader(type);
 
-	glShaderSource(shader_obj, 1, source, length);
+	glShaderSource(shader_obj, 1, &source, &length);
 	glCompileShader(shader_obj);
 
 	return shader_obj;
