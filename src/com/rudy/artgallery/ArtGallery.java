@@ -15,6 +15,7 @@ import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.Toast;
 
 /**
@@ -48,9 +49,32 @@ public class ArtGallery extends Activity
 				Scanner s = new Scanner(iStream);
 				FileOutputStream oStream = new FileOutputStream(shaderDir + "fshader");
 				
+				Log.d("com.rudy.artgallery", "Writing Fragment Shaders");
+				
 				while(s.hasNextLine())
 				{
-					oStream.write(s.nextLine().getBytes());
+					String tmp = s.nextLine();
+					
+					Log.d("com.rudy.artgallery", "F: " + tmp);
+					oStream.write(tmp.getBytes());
+				}
+				
+				s.close();
+				
+				oStream.close();
+				
+				iStream = mgr.open("vShader");
+				s = new Scanner(iStream);
+				oStream = new FileOutputStream(shaderDir + "vshader");
+				
+				Log.d("com.rudy.artgallery", "Writing Vertex Shaders");
+				
+				while(s.hasNextLine())
+				{
+					String tmp = s.nextLine();
+					
+					Log.d("com.rudy.artgallery", "V: " + tmp);
+					oStream.write(tmp.getBytes());
 				}
 				
 				s.close();
