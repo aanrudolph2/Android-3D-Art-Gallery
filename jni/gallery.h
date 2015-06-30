@@ -1,16 +1,12 @@
 #include <jni.h>
 #include <GLES2/gl2.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include "util/shader.h"
 
 /* Header for class com_rudy_artgallery_JNIWrapper */
 
 #ifndef _Included_com_rudy_artgallery_JNIWrapper
 #define _Included_com_rudy_artgallery_JNIWrapper
-#ifdef __cplusplus
-extern "C" {
-#endif
+
 /*
  * Class:     com_rudy_artgallery_JNIWrapper
  * Method:    createGLSurface
@@ -38,7 +34,4 @@ JNIEXPORT void JNICALL Java_com_rudy_artgallery_GallerySurfaceView_drawFrame
 JNIEXPORT void JNICALL Java_com_rudy_artgallery_GallerySurfaceView_setShaderDir
   (JNIEnv *, jclass, jstring, jstring);
 
-#ifdef __cplusplus
-}
-#endif
 #endif

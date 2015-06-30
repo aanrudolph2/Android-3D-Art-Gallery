@@ -1,7 +1,6 @@
 #include "gallery.h"
 
-extern const char * fShaderPath;
-extern const char * vShaderPath;
+GLint vertBuffer;
 
 JNIEXPORT void JNICALL Java_com_rudy_artgallery_GallerySurfaceView_createGLSurface(JNIEnv * env, jclass cls)
 {
@@ -44,7 +43,12 @@ JNIEXPORT void JNICALL Java_com_rudy_artgallery_GallerySurfaceView_createGLSurfa
 		free(frag_shader_src);
 	}
 
-	glClearColor(1, 0, 0, 0);
+	glClearColor(0, 0, 0, 0);
+
+	float verts[] = 	{0, 0, 0,
+						 0, 0, 1,
+						 0, 1, 1};
+
 }
 JNIEXPORT void JNICALL Java_com_rudy_artgallery_GallerySurfaceView_changeGLSurface(JNIEnv * env, jclass cls, jint w, jint h)
 {
@@ -53,9 +57,7 @@ JNIEXPORT void JNICALL Java_com_rudy_artgallery_GallerySurfaceView_changeGLSurfa
 JNIEXPORT void JNICALL Java_com_rudy_artgallery_GallerySurfaceView_drawFrame(JNIEnv * env, jclass cls)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
-}
-JNIEXPORT void JNICALL Java_com_rudy_artgallery_GallerySurfaceView_loadShaderSrc (JNIEnv * env, jclass cls, jstring fShader, jstring vShader)
-{
-	fShaderPath = (*env)->GetStringUTFChars(env, fShader, 0);
-	vShaderPath = (*env)->GetStringUTFChars(env, vShader, 0);
+
+	glDrawArrays(GL_TRIANGLES, 0, 9);
+
 }

@@ -1,7 +1,5 @@
 package com.rudy.artgallery;
 
-import java.io.File;
-
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -19,14 +17,10 @@ public class GallerySurfaceView extends GLSurfaceView
 	private static native void createGLSurface();
 	private static native void changeGLSurface(int width, int height);
 	private static native void drawFrame();
-	private static native void loadShaderSrc(String vShader, String fShader);
 	
 	public GallerySurfaceView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
-		
-		String rootDir = context.getDir("com.rudy.artgallery", Context.MODE_PRIVATE).getPath() + File.separator;
-		loadShaderSrc(rootDir + "fshader", rootDir + "vshader");
 		
 		setEGLContextClientVersion(2);
 		setRenderer(new GalleryRenderer());
