@@ -1,53 +1,42 @@
 #include "gallery.h"
 
 GLint vertBuffer;
+GLint positionHandle;
+GLuint shaderProg;
+
+float verts[] = 	{1, 0, 0,
+					 0, 1, 0,
+					 -1, 0, 0};
 
 JNIEXPORT void JNICALL Java_com_rudy_artgallery_GallerySurfaceView_createGLSurface(JNIEnv * env, jclass cls)
 {
-	long int frag_shader_len = -1;
-	long int vert_shader_len = -1;
 
-	char * frag_shader_src;
-	char * vert_shader_src;
+	const char * frag_shader_src =
+		"	precision mediump float;\
+			void main()\
+			{\
+				gl_FragColor = vec4(1, 1, 1, 1);\
+			}";
+	const char * vert_shader_src =
+		"	attribute vec4 a_Position;\
+			\
+			void main()\
+			{\
+			    gl_Position = a_Position;\
+			}";
 
-	FILE * frag_shader = fopen(fShaderPath, "rb");
-	FILE * vert_shader = fopen(vShaderPath, "rb");
+	shaderProg = build_program(vert_shader_src, strlen(vert_shader_src), frag_shader_src, strlen(frag_shader_src));
 
-	// Get length of fragment shader
-	if(fseek(frag_shader, 0, SEEK_END))
-	{
-		frag_shader_len = ftell(frag_shader);
-		frag_shader_src = malloc(frag_shader_len * sizeof(char));
+	glGenBuffers(1, &vertBuffer);
 
-		frag_shader_len = fread(frag_shader_src, 1, frag_shader_len, frag_shader);
-	}
+	glBindBuffer(GL_ARRAY_BUFFER, vertBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
 
-	fclose(frag_shader);
+	glUseProgram(shaderProg);
 
-	// Get length of vertex shader
-	if(fseek(vert_shader, 0, SEEK_END))
-	{
-		vert_shader_len = ftell(vert_shader);
-		vert_shader_src = malloc(vert_shader_len * sizeof(char));
-
-		vert_shader_len = fread(vert_shader_src, 1, vert_shader_len, vert_shader);
-	}
-
-	fclose(vert_shader);
-
-	if(frag_shader_len > -1 && vert_shader_len > -1)
-	{
-		build_program(vert_shader_src, vert_shader_len, frag_shader_src, frag_shader_len);
-
-		free(vert_shader_src);
-		free(frag_shader_src);
-	}
+	positionHandle = glGetAttribLocation(shaderProg, "a_Position");
 
 	glClearColor(0, 0, 0, 0);
-
-	float verts[] = 	{0, 0, 0,
-						 0, 0, 1,
-						 0, 1, 1};
 
 }
 JNIEXPORT void JNICALL Java_com_rudy_artgallery_GallerySurfaceView_changeGLSurface(JNIEnv * env, jclass cls, jint w, jint h)
@@ -58,6 +47,13 @@ JNIEXPORT void JNICALL Java_com_rudy_artgallery_GallerySurfaceView_drawFrame(JNI
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	glDrawArrays(GL_TRIANGLES, 0, 9);
+	glBindBuffer(GL_ARRAY_BUFFER, vertBuffer);
+
+	glVertexAttribPointer(positionHandle, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(positionHandle);
+
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+
+	glDisableVertexAttribArray(positionHandle);
 
 }
